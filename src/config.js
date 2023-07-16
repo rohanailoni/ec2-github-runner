@@ -15,7 +15,7 @@ class Config {
       iamRoleName: core.getInput('iam-role-name'),
       runnerHomeDir: core.getInput('runner-home-dir'),
       preRunnerScript: core.getInput('pre-runner-script'),
-      count: parseInt(core.getInput('count')),
+      runnerCount: parseInt(core.getInput('runner-count')),
     };
 
     const tags = JSON.parse(core.getInput('aws-resource-tags'));

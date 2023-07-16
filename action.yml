@@ -62,7 +62,7 @@ inputs:
       for example: '[{"Key": "TagKey1", "Value": "TagValue1"}, {"Key": "TagKey2", "Value": "TagValue2"}]'
     required: false
     default: '[]'
-  count:
+  runner-count:
     description: >-
       ECS instance count, defaults to 1
     required: false
