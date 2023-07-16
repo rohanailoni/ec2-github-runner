@@ -4,9 +4,9 @@ const config = require('./config');
 const core = require('@actions/core');
 
 function setOutput(label, ec2InstanceIds) {
-  core.info(`setting output label:${label}  ec2InstanceIds:${ec2InstanceIds} ${typeof ec2InstanceIds}`);
+  core.info(`setting output label:${label}  ec2InstanceIds:${ec2InstanceIds}`);
   core.setOutput('label', label);
-  core.setOutput('ec2-instance-ids', ec2InstanceIds);
+  core.setOutput('ec2-instance-ids', JSON.stringify(ec2InstanceIds));
 }
 
 async function start() {
