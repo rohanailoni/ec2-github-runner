@@ -29,9 +29,13 @@ class Config {
     const hostName = core.getInput("host-name")
     if (hostName!=null){
       if (this.tagSpecifications ==null){
-        core.info("No hostname found so skipping this level");
+        core.info("tag specifications is null  so adding it");
+        this.tagSpecifications = [{ResourceType: 'instance', Tags: [{ Key: 'Name', Value: hostName }]}];
       }else{
-        this.tagSpecifications[0].Tags.push({ Key: 'Name', Value: hostName });
+        //fixme this is kinda hacky way but yeah we are moving forward as this works :)
+        this.tagSpecifications.forEach(specs => {
+          specs.Tags.push({ Key: 'Name', Value: hostName });
+        });
         core.info(`added the tags to the with host name ${hostName}`);
       }
     }else{
