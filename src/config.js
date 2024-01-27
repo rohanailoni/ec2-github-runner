@@ -20,8 +20,15 @@ class Config {
 
     const tags = JSON.parse(core.getInput('aws-resource-tags'));
     this.tagSpecifications = null;
+    // for now disabling the custom tag rather we will use key-value tag to attach host name for easy approval
+
     if (tags.length > 0) {
       this.tagSpecifications = [{ResourceType: 'instance', Tags: tags}, {ResourceType: 'volume', Tags: tags}];
+    }
+    const hostName = core.getInput("host-name")
+    if (hostName==null){
+      this.tagSpecifications[0].Tags.push({ Key: 'Name', Value: 'YourDesiredHostname' });
+      core.info(`added the tags to the with host name ${hostName}`);
     }
 
     // the values of github.context.repo.owner and github.context.repo.repo are taken from
