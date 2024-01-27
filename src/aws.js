@@ -78,9 +78,9 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
   const ec2InstacesIds=[];
   const ec2InstaceIdWithLabels=[];
   const labels=[];
+  const ec2 = new AWS.EC2();
   core.info(`starting the instances of a total of ${maxConfigRunners}`)
   for (let i = 0; i < maxConfigRunners; i++) {
-    const ec2 = new AWS.EC2();
     const labelForThisInstance= config.generateUniqueLabel();
     const userData = buildUserDataScript(githubRegistrationToken, labelForThisInstance);
 
@@ -107,9 +107,9 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
       core.error('AWS EC2 instance starting error');
       throw error;
     }
-    return ec2InstaceIdWithLabels,ec2InstacesIds,labels;
 
   }
+  return ec2InstaceIdWithLabels,ec2InstacesIds,labels;
 }
 
 async function terminateEc2Instance() {
