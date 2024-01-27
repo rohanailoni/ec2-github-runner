@@ -94,4 +94,4 @@ outputs:
       The id is used to terminate the EC2 instance when the runner is not needed anymore.
 runs:
   using: node16
-  main: ./src/index.js
+  main: ./dist/index.js
