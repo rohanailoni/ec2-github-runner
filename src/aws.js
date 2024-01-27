@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const core = require('@actions/core');
 const config = require('./config');
+const { info } = require('@actions/core');
 
 // User data scripts are run as the root user
 function buildUserDataScript(githubRegistrationToken, label) {
@@ -77,6 +78,7 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
   const ec2InstacesIds=[];
   const ec2InstaceIdWithLabels=[];
   const labels=[];
+  core.info(`starting the instances of a total of ${maxConfigRunners}`)
   for (let i = 0; i < maxConfigRunners; i++) {
     const ec2 = new AWS.EC2();
     const labelForThisInstance= config.generateUniqueLabel();
