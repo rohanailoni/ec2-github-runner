@@ -27,8 +27,13 @@ class Config {
     }
     const hostName = core.getInput("host-name")
     if (hostName==null){
-      this.tagSpecifications[0].Tags.push({ Key: 'Name', Value: 'YourDesiredHostname' });
-      core.info(`added the tags to the with host name ${hostName}`);
+      if (this.tagSpecifications ==null){
+        core.info("No hostname found so skipping this level");
+      }else{
+        this.tagSpecifications[0].Tags.push({ Key: 'Name', Value: hostName });
+        core.info(`added the tags to the with host name ${hostName}`);
+      }
+
     }
 
     // the values of github.context.repo.owner and github.context.repo.repo are taken from
