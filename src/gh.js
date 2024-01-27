@@ -56,41 +56,49 @@ async function removeRunner() {
   }
 
 }
-
-async function waitForRunnerRegistered(label) {
-  const timeoutMinutes = 5;
-  const retryIntervalSeconds = 10;
-  const quietPeriodSeconds = 30;
+async function waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSeconds) {
   let waitSeconds = 0;
-
-  core.info(`Waiting ${quietPeriodSeconds}s for the AWS EC2 instance to be registered in GitHub as a new self-hosted runner`);
-  await new Promise(r => setTimeout(r, quietPeriodSeconds * 1000));
-  core.info(`Checking every ${retryIntervalSeconds}s if the GitHub self-hosted runner is registered`);
-
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       const runners = await getRunners(label);
 
       if (waitSeconds > timeoutMinutes * 60) {
-        core.error('GitHub self-hosted runner registration error');
+        core.error(`GitHub self-hosted runner registration error for label ${label}`);
         clearInterval(interval);
-        reject(`A timeout of ${timeoutMinutes} minutes is exceeded. Your AWS EC2 instance was not able to register itself in GitHub as a new self-hosted runner.`);
+        reject(`A timeout of ${timeoutMinutes} minutes is exceeded. Your AWS EC2 instance with label ${label} was not able to register itself in GitHub as a new self-hosted runner.`);
       }
 
       if (runners && runners.every((runner => runner.status === 'online'))) {
-        core.info(`GitHub self-hosted runners ${runners} are registered and ready to use`);
+        core.info(`GitHub self-hosted runners for label ${label} are registered and ready to use`);
         clearInterval(interval);
         resolve();
       } else {
         waitSeconds += retryIntervalSeconds;
-        core.info('Checking...');
+        core.info(`Checking for label ${label}...`);
       }
     }, retryIntervalSeconds * 1000);
   });
 }
+async function waitForRunnersRegistered(labels) {
+  const timeoutMinutes = 5;
+  const retryIntervalSeconds = 10;
+  const quietPeriodSeconds = 30;
+
+
+  core.info(`Waiting ${quietPeriodSeconds}s for the AWS EC2 instances to be registered in GitHub as new self-hosted runners`);
+  await new Promise(r => setTimeout(r, quietPeriodSeconds * 1000));
+  core.info(`Checking every ${retryIntervalSeconds}s if the GitHub self-hosted runners are registered`);
+
+  return Promise.all(
+    labels.map(label => waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSeconds))
+  );
+}
+
+
 
 module.exports = {
   getRegistrationToken,
   removeRunner,
   waitForRunnerRegistered,
+  waitForRunnersRegistered
 };

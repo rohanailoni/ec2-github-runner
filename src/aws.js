@@ -59,6 +59,56 @@ async function startEc2Instance(label, githubRegistrationToken) {
     throw error;
   }
 }
+class ec2InstaceIdWithLabel{
+  constructor(label, ec2InstanceId) {
+    this.label = label;
+    this.ec2InstanceId = ec2InstanceId;
+  }
+
+  getLabel() {
+    return this.label;
+  }
+
+  getEc2InstanceId() {
+    return this.ec2InstanceId;
+  }
+}
+async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubRegistrationToken){
+  const ec2InstacesIds=[];
+  const ec2InstaceIdWithLabels=[];
+  const labels=[];
+  for (let i = 0; i < maxConfigRunners; i++) {
+    const ec2 = new AWS.EC2();
+    const labelForThisInstance= config.generateUniqueLabel();
+    const userData = buildUserDataScript(githubRegistrationToken, labelForThisInstance);
+
+    const params = {
+      ImageId: config.input.ec2ImageId,
+      InstanceType: config.input.ec2InstanceType,
+      MinCount: 1,
+      MaxCount: 1,
+      UserData: Buffer.from(userData.join('\n')).toString('base64'),
+      SubnetId: config.input.subnetId,
+      SecurityGroupIds: [config.input.securityGroupId],
+      IamInstanceProfile: { Name: config.input.iamRoleName },
+      TagSpecifications: config.tagSpecifications,
+    };
+    try {
+      core.info("AWS EC2 instances are starting");
+      const result = await ec2.runInstances(params).promise();
+      const ec2InstanceId = result.Instances[0].InstanceId;
+      core.info(`AWS EC2 instances ${ec2InstanceId} are started`);
+      ec2InstacesIds.push(ec2InstanceId);
+      ec2InstaceIdWithLabels.push(new ec2InstaceIdWithLabel(labelForThisInstance,ec2InstanceId));
+      labels.push(labelForThisInstance);
+    } catch (error) {
+      core.error('AWS EC2 instance starting error');
+      throw error;
+    }
+    return ec2InstaceIdWithLabels,ec2InstacesIds,labels;
+
+  }
+}
 
 async function terminateEc2Instance() {
   const ec2 = new AWS.EC2();
@@ -98,4 +148,5 @@ module.exports = {
   startEc2Instance,
   terminateEc2Instance,
   waitForInstanceRunning,
+  startEc2withUniqueLabelForEachInstance
 };

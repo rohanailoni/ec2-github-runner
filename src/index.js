@@ -11,13 +11,14 @@ function setOutput(label, ec2InstanceIds) {
 
 async function start() {
   core.info("RocketLaneStage")
-  const label = config.generateUniqueLabel();
+  //const label = config.generateUniqueLabel();
   const githubRegistrationToken = await gh.getRegistrationToken();
-  const ec2InstanceIds = await aws.startEc2Instance(label, githubRegistrationToken);
-
-  setOutput(label, ec2InstanceIds);
-  await aws.waitForInstanceRunning(ec2InstanceIds);
-  await gh.waitForRunnerRegistered(label);
+  //const ec2InstanceIds = await aws.startEc2Instance(label, githubRegistrationToken);
+  const [ec2InstaceIdWithLabels,ec2InstacesIds,labels]=await aws.startEc2withUniqueLabelForEachInstance(config.input.runnerCount,githubRegistrationToken);
+  core.info(ec2InstaceIdWithLabels);
+  setOutput(labels, ec2InstacesIds);
+  await aws.waitForInstanceRunning(ec2InstacesIds);
+  await gh.waitForRunnersRegistered(labels);
 }
 
 async function stop() {
