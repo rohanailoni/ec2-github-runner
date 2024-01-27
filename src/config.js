@@ -22,6 +22,7 @@ class Config {
     this.tagSpecifications = null;
     // for now disabling the custom tag rather we will use key-value tag to attach host name for easy approval
 
+
     if (tags.length > 0) {
       this.tagSpecifications = [{ResourceType: 'instance', Tags: tags}, {ResourceType: 'volume', Tags: tags}];
     }
@@ -33,9 +34,8 @@ class Config {
         this.tagSpecifications[0].Tags.push({ Key: 'Name', Value: hostName });
         core.info(`added the tags to the with host name ${hostName}`);
       }
-
     }else{
-      core.info("havent found any hostname in the parameters");
+      core.info("haven't found any hostname in the parameters");
     }
 
 

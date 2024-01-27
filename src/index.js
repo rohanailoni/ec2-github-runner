@@ -10,13 +10,14 @@ function setOutput(label, ec2InstanceIds) {
 }
 
 async function start() {
-  const label = config.generateUniqueLabel();
-  const githubRegistrationToken = await gh.getRegistrationToken();
-  const ec2InstanceIds = await aws.startEc2Instance(label, githubRegistrationToken);
-
-  setOutput(label, ec2InstanceIds);
-  await aws.waitForInstanceRunning(ec2InstanceIds);
-  await gh.waitForRunnerRegistered(label);
+  core.info("RocketLaneStage")
+  // const label = config.generateUniqueLabel();
+  // const githubRegistrationToken = await gh.getRegistrationToken();
+  // const ec2InstanceIds = await aws.startEc2Instance(label, githubRegistrationToken);
+  //
+  // setOutput(label, ec2InstanceIds);
+  // await aws.waitForInstanceRunning(ec2InstanceIds);
+  // await gh.waitForRunnerRegistered(label);
 }
 
 async function stop() {
