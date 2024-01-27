@@ -26,7 +26,7 @@ class Config {
       this.tagSpecifications = [{ResourceType: 'instance', Tags: tags}, {ResourceType: 'volume', Tags: tags}];
     }
     const hostName = core.getInput("host-name")
-    if (hostName==null){
+    if (hostName!=null){
       if (this.tagSpecifications ==null){
         core.info("No hostname found so skipping this level");
       }else{
@@ -34,7 +34,10 @@ class Config {
         core.info(`added the tags to the with host name ${hostName}`);
       }
 
+    }else{
+      core.info("havent found any hostname in the parameters");
     }
+
 
     // the values of github.context.repo.owner and github.context.repo.repo are taken from
     // the environment variable GITHUB_REPOSITORY specified in "owner/repo" format and
