@@ -106,15 +106,13 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
       ec2InstacesIds.push(ec2InstanceId);
       ec2InstaceIdWithLabels.push(new ec2InstaceIdWithLabel(labelForThisInstance,ec2InstanceId));
       labels.push(labelForThisInstance);
-      core.info(`printing labels as a part of debug:-${labels} and iteration i ${i}`);
-      core.info(`printing instanceId array as a part of debug:-${ec2InstacesIds} and iteration i :- ${i}`);
+
     } catch (error) {
       core.error('AWS EC2 instance starting error');
       throw error;
     }
 
   }
-  core.info(`labels:- ${labels} ec2InstanceId:- ${ec2InstacesIds}`)
   return [ec2InstaceIdWithLabels,ec2InstacesIds,labels];
 }
 
