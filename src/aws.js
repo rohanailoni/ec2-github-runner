@@ -115,7 +115,7 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
 
   }
   core.info(`labels:- ${labels} ec2InstanceId:- ${ec2InstacesIds}`)
-  return ec2InstaceIdWithLabels,ec2InstacesIds,labels;
+  return [ec2InstaceIdWithLabels,ec2InstacesIds,labels];
 }
 
 async function terminateEc2Instance() {
