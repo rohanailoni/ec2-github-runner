@@ -15,7 +15,9 @@ async function start() {
   const githubRegistrationToken = await gh.getRegistrationToken();
   //const ec2InstanceIds = await aws.startEc2Instance(label, githubRegistrationToken);
   const [ec2InstaceIdWithLabels,ec2InstacesIds,labels]=await aws.startEc2withUniqueLabelForEachInstance(config.input.runnerCount,githubRegistrationToken);
-  core.info(ec2InstaceIdWithLabels);
+  core.info(`ec2InstaceId labels:-${ec2InstaceIdWithLabels}`);
+  core.info(`labels created :- ${labels}`)
+  core.info(`ec2Intances created :-${ec2InstacesIds}`);
   setOutput(labels, ec2InstacesIds);
   await aws.waitForInstanceRunning(ec2InstacesIds);
   await gh.waitForRunnersRegistered(labels);

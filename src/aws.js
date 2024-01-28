@@ -99,10 +99,12 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
       core.info("AWS EC2 instances are starting");
       const result = await ec2.runInstances(params).promise();
       const ec2InstanceId = result.Instances[0].InstanceId;
-      core.info(`AWS EC2 instances ${ec2InstanceId} are started`);
+      core.info(`AWS EC2 instances ${ec2InstanceId} are started with label ${labelForThisInstance}`);
       ec2InstacesIds.push(ec2InstanceId);
       ec2InstaceIdWithLabels.push(new ec2InstaceIdWithLabel(labelForThisInstance,ec2InstanceId));
       labels.push(labelForThisInstance);
+      core.info(`printing labels as a part of debug:-${labels} and iteration i ${i}`);
+      core.info(`printing instanceId array as a part of debug:-${ec2InstacesIds} and iteration i :- ${i}`);
     } catch (error) {
       core.error('AWS EC2 instance starting error');
       throw error;
