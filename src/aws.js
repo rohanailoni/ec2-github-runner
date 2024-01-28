@@ -78,6 +78,9 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
   const ec2InstacesIds=[];
   const ec2InstaceIdWithLabels=[];
   const labels=[];
+
+
+
   const ec2 = new AWS.EC2();
   core.info(`starting the instances of a total of ${maxConfigRunners}`)
   for (let i = 0; i < maxConfigRunners; i++) {
@@ -111,6 +114,7 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
     }
 
   }
+  core.info(`labels:- ${labels} ec2InstanceId:- ${ec2InstacesIds}`)
   return ec2InstaceIdWithLabels,ec2InstacesIds,labels;
 }
 
