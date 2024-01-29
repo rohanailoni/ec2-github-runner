@@ -89,9 +89,10 @@ async function waitForRunnersRegistered(labels) {
   await new Promise(r => setTimeout(r, quietPeriodSeconds * 1000));
   core.info(`Checking every ${retryIntervalSeconds}s if the GitHub self-hosted runners are registered`);
 
-  return Promise.all(
+  const promises = await Promise.all(
     labels.map(label => waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSeconds))
   );
+  return promises;
 }
 
 
