@@ -61,7 +61,7 @@ async function waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSecon
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       const runners = await getRunners(label);
-
+      core.info(`[DEBUG_ROHAN] RUNNER CONFIG ${runners}`);
       if (waitSeconds > timeoutMinutes * 60) {
         core.error(`GitHub self-hosted runner registration error for label ${label}`);
         clearInterval(interval);
