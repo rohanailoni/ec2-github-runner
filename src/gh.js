@@ -32,27 +32,32 @@ async function getRegistrationToken() {
 }
 
 async function removeRunner() {
-  const runners = await getRunners(config.input.label);
-  const octokit = github.getOctokit(config.input.githubToken);
+  const labels = config.input.label;
+  for(const label of labels) {
 
-  // skip the runner removal process if the runner is not found
-  if (!runners) {
-    core.info(`GitHub self-hosted runner with label ${config.input.label} is not found, so the removal is skipped`);
-    return;
-  }
 
-  const errors = [];
-  for (const runner of runners) {
-    try {
-      await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', _.merge(config.githubContext, { runner_id: runner.id }));
-      core.info(`GitHub self-hosted runner ${runner.name} is removed`);
-    } catch (error) {
-      core.error(`GitHub self-hosted runner removal error: ${error}`);
-      errors.push(error);
+    const runners = await getRunners(label);
+    const octokit = github.getOctokit(config.input.githubToken);
+
+    // skip the runner removal process if the runner is not found
+    if (!runners) {
+      core.info(`GitHub self-hosted runner with label ${config.input.label} is not found, so the removal is skipped`);
+      return;
     }
-  }
-  if (errors.length > 0) {
-    core.setFailed('Failures occurred when removing runners.');
+
+    const errors = [];
+    for (const runner of runners) {
+      try {
+        await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', _.merge(config.githubContext, { runner_id: runner.id }));
+        core.info(`GitHub self-hosted runner ${runner.name} is removed`);
+      } catch (error) {
+        core.error(`GitHub self-hosted runner removal error: ${error}`);
+        errors.push(error);
+      }
+    }
+    if (errors.length > 0) {
+      core.setFailed('Failures occurred when removing runners.');
+    }
   }
 
 }
@@ -61,7 +66,16 @@ async function waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSecon
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       const runners = await getRunners(label);
-      core.info(`[DEBUG_ROHAN] RUNNER CONFIG ${runners}`);
+
+
+      try {
+
+          core.info(`[DEBUG_ROHAN] RUNNER CONFIG ${JSON.stringify(runners)}`);
+      } catch (error) {
+
+        core.warning("[DEBUG_ROHAN] RUNNER CONFIG runner is null");
+      }
+
       if (waitSeconds > timeoutMinutes * 60) {
         core.error(`GitHub self-hosted runner registration error for label ${label}`);
         clearInterval(interval);

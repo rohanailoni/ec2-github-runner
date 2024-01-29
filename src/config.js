@@ -10,7 +10,7 @@ class Config {
       ec2InstanceType: core.getInput('ec2-instance-type'),
       subnetId: core.getInput('subnet-id'),
       securityGroupId: core.getInput('security-group-id'),
-      label: core.getInput('label'),
+      label: JSON.parse(core.getInput('label')),
       ec2InstanceIds: JSON.parse(core.getInput('ec2-instance-ids')),
       iamRoleName: core.getInput('iam-role-name'),
       runnerHomeDir: core.getInput('runner-home-dir'),
@@ -78,6 +78,18 @@ class Config {
 
   generateUniqueLabel() {
     return Math.random().toString(36).substr(2, 15);
+  }
+  generateRandomLabel() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const labelLength = 20;
+    let randomLabel = '';
+
+    for (let i = 0; i < labelLength; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomLabel += characters.charAt(randomIndex);
+    }
+
+    return randomLabel;
   }
 }
 

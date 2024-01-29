@@ -84,7 +84,7 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
   const ec2 = new AWS.EC2();
   core.info(`starting the instances of a total of ${maxConfigRunners}`)
   for (let i = 0; i < maxConfigRunners; i++) {
-    const labelForThisInstance= config.generateUniqueLabel();
+    const labelForThisInstance= config.generateRandomLabel();
     const userData = buildUserDataScript(githubRegistrationToken, labelForThisInstance);
 
     const params = {
