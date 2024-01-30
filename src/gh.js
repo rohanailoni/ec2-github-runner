@@ -38,10 +38,14 @@ async function removeRunner() {
 
     const runners = await getRunners(label);
     const octokit = github.getOctokit(config.input.githubToken);
-
+    try{
+      console.log("github runner return",JSON.stringify(runners));
+    }catch (e){
+      console.log(`no runner found for label ${labels}`)
+    }
     // skip the runner removal process if the runner is not found
     if (!runners) {
-      core.info(`GitHub self-hosted runner with label ${config.input.label} is not found, so the removal is skipped`);
+      core.info(`GitHub self-hosted runner with label ${label} is not found, so the removal is skipped`);
       return;
     }
 
