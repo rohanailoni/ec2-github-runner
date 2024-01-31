@@ -66,6 +66,7 @@ inputs:
     description: >-
       attach key pair pem file to login
     required : false
+    default: 'aws-stage'
   host-name:
     description:
       This will be the hostname set for self hosted runner if none is specified then we will default to self-hosted.
