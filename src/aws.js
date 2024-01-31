@@ -97,6 +97,7 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
       SecurityGroupIds: [config.input.securityGroupId],
       IamInstanceProfile: { Name: config.input.iamRoleName },
       TagSpecifications: config.tagSpecifications,
+      KeyName: config.awsKeyPair
     };
     try {
       core.info("AWS EC2 instances are starting");

@@ -62,6 +62,10 @@ inputs:
       for example: '[{"Key": "TagKey1", "Value": "TagValue1"}, {"Key": "TagKey2", "Value": "TagValue2"}]'
     required: false
     default: '[]'
+  key-pair:
+    description: >-
+      attach key pair pem file to login
+    required : false
   host-name:
     description:
       This will be the hostname set for self hosted runner if none is specified then we will default to self-hosted.

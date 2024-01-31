@@ -17,7 +17,7 @@ class Config {
       preRunnerScript: core.getInput('pre-runner-script'),
       runnerCount: parseInt(core.getInput('runner-count')),
     };
-
+    this.awsKeyPair=core.getInput('key-pair');
     const tags = JSON.parse(core.getInput('aws-resource-tags'));
     this.tagSpecifications = null;
     // for now disabling the custom tag rather we will use key-value tag to attach host name for easy approval
