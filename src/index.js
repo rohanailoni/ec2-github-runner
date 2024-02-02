@@ -32,8 +32,12 @@ async function defaults(){
   const runner_count=config.input.runnerCount;
   core.info(`RunnerCount ${runner_count}`);
   const labels = Array.from({ length: runner_count }, () => "ubuntu-latest");
+  const ec2RunnerHostName =  Array.from({ length: runner_count }, () => "i-ROCKETBYROHAN");
   core.info(`setting output label:${labels} `)
+  core.info(`setting output label:${ec2RunnerHostName} `)
   core.setOutput('label', labels);
+  core.setOutput('ec2-instance-ids', ec2RunnerHostName);
+
 
 }
 
