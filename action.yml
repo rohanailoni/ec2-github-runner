@@ -12,6 +12,7 @@ inputs:
         - 'stop' - to stop the previously created runner.
         - 'default' - to make ubuntu-latest as default;
     required: true
+    default: "defult"
   github-token:
     description: >-
       GitHub Personal Access Token with the 'repo' scope assigned.
