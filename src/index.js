@@ -39,16 +39,16 @@ async function defaults(){
 
 (async function () {
   try {
-    if(config.input.mode === 'start'){
-      return await start();
+    switch (config.input.mode) {
+      case 'start':
+        return await start();
+      case 'stop':
+        return await stop();
+      case 'default':
+        return await defaults();
+      default:
+        throw new Error(`Invalid mode: ${config.input.mode}`);
     }
-    if(config.input.mode === 'stop'){
-      return await stop();
-    }
-    if(config.input.mode === 'default'){
-      return await defaults();
-    }
-    //config.input.mode === 'start' ? await start() : await stop();
   } catch (error) {
     core.error(error);
     core.setFailed(error.message);
