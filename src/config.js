@@ -71,7 +71,12 @@ class Config {
       if (!this.input.label || !this.input.ec2InstanceIds) {
         throw new Error(`Not all the required inputs are provided for the 'stop' mode`);
       }
-    } else {
+    }else if(this.input.mode === 'default'){
+      if (!this.input.label) {
+        throw new Error(`Not all the required inputs are provided for the 'default' mode`);
+      }
+    }
+    else {
       throw new Error('Wrong mode. Allowed values: start, stop.');
     }
   }
