@@ -27,10 +27,28 @@ async function stop() {
   await aws.terminateEc2Instance();
   await gh.removeRunner();
 }
+async function defaults(){
+  core.warning("Runner is falling to default github runner");
+  const runner_count=config.input.runnerCount;
+  core.info(`RunnerCount ${runner_count}`);
+  const labels = Array.from({ length: runner_count }, () => "ubuntu-latest");
+  core.info(`setting output label:${labels} `)
+  core.setOutput('label', labels);
+
+}
 
 (async function () {
   try {
-    config.input.mode === 'start' ? await start() : await stop();
+    if(config.input.mode === 'start'){
+      return await start();
+    }
+    if(config.input.mode === 'stop'){
+      return await stop();
+    }
+    if(config.input.mode === 'default'){
+      return await defaults();
+    }
+    //config.input.mode === 'start' ? await start() : await stop();
   } catch (error) {
     core.error(error);
     core.setFailed(error.message);
