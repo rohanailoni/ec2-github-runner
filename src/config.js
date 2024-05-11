@@ -78,12 +78,13 @@ class Config {
     }else if(this.input.mode === 'default'){
 
     }
-    if (this.marketType?.length > 0 && this.input.marketType !== 'spot') {
-      throw new Error(`Invalid 'market-type' input. Allowed values: spot.`);
-    }
     else {
       throw new Error('Wrong mode. Allowed values: start, stop.');
     }
+    if (this.marketType?.length > 0 && this.input.marketType !== 'spot') {
+      throw new Error(`Invalid 'market-type' input. Allowed values: spot.`);
+    }
+
   }
 
   generateUniqueLabel() {
