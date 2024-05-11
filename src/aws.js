@@ -32,6 +32,19 @@ function buildUserDataScript(githubRegistrationToken, label) {
     ];
   }
 }
+function buildMarketOptions() {
+  if (config.input.marketType === 'spot') {
+    return {
+      MarketType: config.input.marketType,
+      SpotOptions: {
+        SpotInstanceType: 'one-time',
+      },
+    };
+  }
+
+  return undefined;
+}
+
 
 async function startEc2Instance(label, githubRegistrationToken) {
   const ec2 = new AWS.EC2();
@@ -48,6 +61,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
     SecurityGroupIds: [config.input.securityGroupId],
     IamInstanceProfile: { Name: config.input.iamRoleName },
     TagSpecifications: config.tagSpecifications,
+    InstanceMarketOptions: buildMarketOptions(),
   };
 
   try {
@@ -84,7 +98,7 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
   const ec2 = new AWS.EC2();
   core.info(`starting the instances of a total of ${maxConfigRunners}`)
   for (let i = 0; i < maxConfigRunners; i++) {
-    const labelForThisInstance= config.generateUniqueLabel();
+    const labelForThisInstance= config.generateRandomString(60);
     const userData = buildUserDataScript(githubRegistrationToken, labelForThisInstance);
 
     const params = {
@@ -97,7 +111,8 @@ async function startEc2withUniqueLabelForEachInstance(maxConfigRunners,githubReg
       SecurityGroupIds: [config.input.securityGroupId],
       IamInstanceProfile: { Name: config.input.iamRoleName },
       TagSpecifications: config.tagSpecifications,
-      KeyName: config.awsKeyPair
+      KeyName: config.awsKeyPair,
+      InstanceMarketOptions: buildMarketOptions()
     };
     try {
       core.info("AWS EC2 instances are starting");
