@@ -1,5 +1,8 @@
 const core = require('@actions/core');
+const crypto = require('crypto');
 const github = require('@actions/github');
+
+
 
 class Config {
   constructor() {
@@ -16,6 +19,7 @@ class Config {
       runnerHomeDir: core.getInput('runner-home-dir'),
       preRunnerScript: core.getInput('pre-runner-script'),
       runnerCount: parseInt(core.getInput('runner-count')),
+      marketType: core.getInput('market-type'),
     };
     this.awsKeyPair=core.getInput('key-pair');
     const tags = JSON.parse(core.getInput('aws-resource-tags'));
@@ -77,10 +81,18 @@ class Config {
     else {
       throw new Error('Wrong mode. Allowed values: start, stop.');
     }
+    if (this.marketType?.length > 0 && this.input.marketType !== 'spot') {
+      throw new Error(`Invalid 'market-type' input. Allowed values: spot.`);
+    }
+
   }
 
   generateUniqueLabel() {
     return Math.random().toString(36).substr(2, 15);
+  }
+  generateRandomString(length) {
+    const bytes = crypto.randomBytes(Math.ceil(length / 2));
+    return bytes.toString('hex').slice(0, length);
   }
 }
 
