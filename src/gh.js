@@ -11,19 +11,17 @@ async function getRunners(label) {
   try {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
     try{
-      if(runners!==undefined){
-        core.info(`Runnerssss ${JSON.stringify(runners)}`);
-      }
-      const overalllength=runners.total_count;
-      if(runners.runners.length===undefined){
+
+
+      if(runners.length===undefined){
         core.info(`Runners is ${JSON.stringify(runners)}`)
       }else{
-        const runnersLength = runners.runners.length;
-        core.info(`Total Runners ${overalllength} and Runners Length ${runnersLength}`);
+        const runnersLength = runners.length;
+        core.info(`Total Runners and Runners Length ${runnersLength}`);
       }
 
     }catch (error){
-      core.info(`Error in getting the length of runners[CAN ignore1gg] ${error}`);
+      core.info(`Error in getting the length of runners[CAN ignore1gg2] ${error}`);
     }
     const foundRunners = _.filter(runners, { labels: [{ name: label }] });
     return foundRunners.length > 0 ? foundRunners : null;
