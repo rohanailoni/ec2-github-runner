@@ -13,7 +13,7 @@ async function getRunners(label) {
     try{
 
       const overalllength=runners.total_count;
-      if(runners.runners.length==undefined){
+      if(runners.runners.length===undefined){
         core.info(`Runners is ${JSON.stringify(runners)}`)
       }else{
         const runnersLength = runners.runners.length;
