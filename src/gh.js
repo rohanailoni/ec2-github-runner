@@ -10,9 +10,17 @@ async function getRunners(label) {
 
   try {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
+    try{
+      const overalllength=runners.total_count;
+      const runnersLength = runners.runners.length;
+      core.info(`Total Runners ${overalllength} and Runners Length ${runnersLength}`);
+    }catch (error){
+      core.info(`Error in getting the length of runners[CAN ignore] ${error}`);
+    }
     const foundRunners = _.filter(runners, { labels: [{ name: label }] });
     return foundRunners.length > 0 ? foundRunners : null;
   } catch (error) {
+    core.error('GitHub self-hosted runner receiving error',error);
     return null;
   }
 }
