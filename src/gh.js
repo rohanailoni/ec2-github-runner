@@ -11,7 +11,9 @@ async function getRunners(label) {
   try {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
     try{
-
+      if(runners!==undefined){
+        core.info(`Runnerssss ${JSON.stringify(runners)}`);
+      }
       const overalllength=runners.total_count;
       if(runners.runners.length===undefined){
         core.info(`Runners is ${JSON.stringify(runners)}`)
@@ -21,7 +23,7 @@ async function getRunners(label) {
       }
 
     }catch (error){
-      core.info(`Error in getting the length of runners[CAN ignore] ${error}`);
+      core.info(`Error in getting the length of runners[CAN ignore1gg] ${error}`);
     }
     const foundRunners = _.filter(runners, { labels: [{ name: label }] });
     return foundRunners.length > 0 ? foundRunners : null;
