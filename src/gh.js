@@ -10,6 +10,7 @@ async function getRunners(label) {
 
   try {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
+    console.log("github runner return length",runners);
     const foundRunners = _.filter(runners, { labels: [{ name: label }] });
     return foundRunners.length > 0 ? foundRunners : null;
   } catch (error) {
