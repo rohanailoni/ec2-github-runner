@@ -9,6 +9,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
   if (config.input.runnerHomeDir) {
     // If runner home directory is specified, we expect the actions-runner software (and dependencies)
     // to be pre-installed in the AMI, so we simply cd into that directory and then start the runner
+    core.info("Have found the runner in AMI so init docker runner ");
     return [
       '#!/bin/bash',
       `cd "${config.input.runnerHomeDir}"`,
@@ -19,6 +20,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
       './run.sh',
     ];
   } else {
+    core.info("Haven't found the runner so installing it ");
     return [
       '#!/bin/bash',
       'mkdir actions-runner && cd actions-runner',

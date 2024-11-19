@@ -92,7 +92,9 @@ class Config {
   }
   generateRandomString(length) {
     const bytes = crypto.randomBytes(Math.ceil(length / 2));
-    return bytes.toString('hex').slice(0, length);
+    const randomString = bytes.toString('hex').slice(0, length);
+    const epochTime = Math.floor(Date.now() / 1000); // Get current epoch time in seconds
+    return `${randomString}-${epochTime}`;
   }
 }
 
