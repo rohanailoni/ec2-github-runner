@@ -24,12 +24,8 @@ async function getRunners(label) {
       core.info(`Error in getting the length of runners[CAN ignore1gg2] ${error}`);
     }
     // const foundRunners = _.filter(runners, { labels: [{ name: label }] });
-    // const foundRunners = runners.filter(runner =>
-    //   runner.labels.some(labelObj => labelObj.name === label)
-    // );
-    console.log(`[DEBUG_ROHAN] runners${JSON.stringify(runners)}`);
     const foundRunners = runners.filter(runner =>
-      JSON.stringify(runner).includes(label)
+      runner.labels.some(labelObj => labelObj.name === label)
     );
     core.info(`Found runners ${JSON.stringify(foundRunners)}`);
     return foundRunners.length > 0 ? foundRunners : null;
@@ -83,7 +79,7 @@ async function waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSecon
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       const runners = await getRunners(label);
-      core.info(`[DEBUG_ROHAN] RUNNER CONFIG ${runners}`);
+      core.info(`[DEBUG_ROHAN] RUNNER CONFIG ${JSON.stringify(runners)}`);
       if (waitSeconds > timeoutMinutes * 60) {
         core.error(`GitHub self-hosted runner registration error for label ${label}`);
         clearInterval(interval);
