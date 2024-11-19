@@ -16,7 +16,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
       `echo "${config.input.preRunnerScript}" > pre-runner-script.sh`,
       'source pre-runner-script.sh',
       'export RUNNER_ALLOW_RUNASROOT=1',
-      `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label} --replace`,
+      `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label} --replace --unattended`,
       './run.sh',
     ];
   } else {
@@ -30,7 +30,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
       'curl -O -L https://github.com/actions/runner/releases/download/v2.299.1/actions-runner-linux-${RUNNER_ARCH}-2.299.1.tar.gz',
       'tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.299.1.tar.gz',
       'export RUNNER_ALLOW_RUNASROOT=1',
-      `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label} --replace`,
+      `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label} --replace --unattended`,
       './run.sh',
     ];
   }
