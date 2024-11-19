@@ -24,8 +24,12 @@ async function getRunners(label) {
       core.info(`Error in getting the length of runners[CAN ignore1gg2] ${error}`);
     }
     // const foundRunners = _.filter(runners, { labels: [{ name: label }] });
+    // const foundRunners = runners.filter(runner =>
+    //   runner.labels.some(labelObj => labelObj.name === label)
+    // );
+    console.log(`[DEBUG_ROHAN] runners${JSON.stringify(runners)}`);
     const foundRunners = runners.filter(runner =>
-      runner.labels.some(labelObj => labelObj.name === label)
+      JSON.stringify(runner).includes(label)
     );
     core.info(`Found runners ${JSON.stringify(foundRunners)}`);
     return foundRunners.length > 0 ? foundRunners : null;
