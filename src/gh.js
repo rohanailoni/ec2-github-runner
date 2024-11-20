@@ -52,7 +52,7 @@ async function getRegistrationToken() {
 async function removeRunner() {
   const runners = await getRunners(config.input.label);
   const octokit = github.getOctokit(config.input.githubToken);
-  core.info(JSON.stringify(runners));
+  core.info(`got runners like this in background ${JSON.stringify(runners)} and levels from config ${JSON.stringify(config.input.label)}`);
   // skip the runner removal process if the runner is not found
   if (runners===undefined) {
     core.info(`GitHub self-hosted runner with label ${config.input.label} is not found, so the removal is skipped`);
