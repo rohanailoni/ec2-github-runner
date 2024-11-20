@@ -12,6 +12,7 @@ async function getRunners(label) {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
     try{
 
+      core.info(`got the labels ${JSON.stringify(label)}`);
 
       if(runners.length===undefined){
         core.info(`Runners is ${JSON.stringify(runners)}`)
@@ -23,7 +24,7 @@ async function getRunners(label) {
     }catch (error){
       core.info(`Error in getting the length of runners[CAN ignore1gg2] ${error}`);
     }
-    const foundRunners = _.filter(runners, { labels: [{ name: label }] });
+    const foundRunners = runners.filter(runner => runner.labels.some(labelObj => labelObj.name === label))[0];
     // const foundRunners = runners.filter(runner =>
     //   runner.labels.some(labelObj => {
     //     console.log(`labelObj.name ${labelObj.name} label ${label}`);
@@ -123,5 +124,6 @@ module.exports = {
   getRegistrationToken,
   removeRunner,
   waitForRunnerRegistered,
-  waitForRunnersRegistered
+  waitForRunnersRegistered,
+  getRunners,
 };
