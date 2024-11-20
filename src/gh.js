@@ -11,7 +11,7 @@ async function getRunners(label,isDeleteFlow) {
   try {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
 
-      if(isDeleteFlow) {
+      if(!isDeleteFlow) {
         core.info(`got the labels ${JSON.stringify(label)}`);
         core.info(`Runners is ${JSON.stringify(runners)}`);
         if (runners.length === undefined) {
@@ -62,7 +62,7 @@ async function getRegistrationToken() {
 }
 
 async function removeRunner() {
-  const runners = await getRunners(config.input.label);
+  const runners = await getRunners(config.input.label,true);
   const octokit = github.getOctokit(config.input.githubToken);
   core.info(`got runners like this in background ${JSON.stringify(runners)} and levels from config ${JSON.stringify(config.input.label)}`);
   // skip the runner removal process if the runner is not found
@@ -90,7 +90,7 @@ async function waitForRunnerRegistered(label, timeoutMinutes, retryIntervalSecon
   let waitSeconds = 0;
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
-      const runners = await getRunners(label);
+      const runners = await getRunners(label,false);
       core.info(`[DEBUG_ROHAN] RUNNER CONFIG ${JSON.stringify(runners)}`);
       if (waitSeconds > timeoutMinutes * 60) {
         core.error(`GitHub self-hosted runner registration error for label ${label}`);
