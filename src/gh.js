@@ -13,7 +13,7 @@ async function getRunners(label) {
     try{
 
       core.info(`got the labels ${JSON.stringify(label)}`);
-
+      core.info(`Runners is ${JSON.stringify(runners)}`);
       if(runners.length===undefined){
         core.info(`Runners is ${JSON.stringify(runners)}`)
       }else{
