@@ -5,40 +5,47 @@ const config = require('./config');
 
 // use the unique label to find the runner
 // as we don't have the runner's id, it's not possible to get it in any other way
-async function getRunners(label) {
+async function getRunners(label,isDeleteFlow) {
   const octokit = github.getOctokit(config.input.githubToken);
 
   try {
     const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
-    try{
 
-      core.info(`got the labels ${JSON.stringify(label)}`);
-      core.info(`Runners is ${JSON.stringify(runners)}`);
-      if(runners.length===undefined){
-        core.info(`Runners is ${JSON.stringify(runners)}`)
+      if(isDeleteFlow) {
+        core.info(`got the labels ${JSON.stringify(label)}`);
+        core.info(`Runners is ${JSON.stringify(runners)}`);
+        if (runners.length === undefined) {
+          core.info(`Runners is ${JSON.stringify(runners)}`)
+        } else {
+          const runnersLength = runners.length;
+          core.info(`Total Runners and Runners Length ${runnersLength}`);
+        }
+        const foundRunners = runners.filter(runner => runner.labels.some(labelObj => labelObj.name === label));
+        core.info(`Found runners ${JSON.stringify(foundRunners)}`);
+        return foundRunners.length > 0 ? foundRunners : null;
+
       }else{
-        const runnersLength = runners.length;
-        core.info(`Total Runners and Runners Length ${runnersLength}`);
+        core.info(`got the labels ${JSON.stringify(label)}`);
+        core.info(`Runners is ${JSON.stringify(runners)}`);
+        if (runners.length === undefined) {
+          core.info(`Runners is ${JSON.stringify(runners)}`)
+        } else {
+          const runnersLength = runners.length;
+          core.info(`Total Runners and Runners Length ${runnersLength}`);
+        }
+        const labels= JSON.parse(label);
+        const foundRunners = runners.filter(runner => runner.labels.some(labelObj => labels.includes(labelObj.name)));
+        core.info(`Found runners ${JSON.stringify(foundRunners)}`);
+        return foundRunners.length > 0 ? foundRunners : null;
+
       }
-
-    }catch (error){
-      core.info(`Error in getting the length of runners[CAN ignore1gg2] ${error}`);
-    }
-    const foundRunners = runners.filter(runner => runner.labels.some(labelObj => labelObj.name === label));
-    // const foundRunners = runners.filter(runner =>
-    //   runner.labels.some(labelObj => {
-    //     console.log(`labelObj.name ${labelObj.name} label ${label}`);
-    //     return labelObj.name === label;
-    //   })
-    // );
-
-    core.info(`Found runners ${JSON.stringify(foundRunners)}`);
-    return foundRunners.length > 0 ? foundRunners : null;
   } catch (error) {
     core.error('GitHub self-hosted runner receiving error',error);
     return null;
   }
+
 }
+
 
 // get GitHub Registration Token for registering a self-hosted runner
 async function getRegistrationToken() {
